@@ -1,5 +1,5 @@
 package com.sparta.zlzonedelivery.user.controller.dto;
 
-public record GetUserResponseDto() {
+public record UserSearchResponseDto() {
 
 }

@@ -1,7 +1,7 @@
 package com.sparta.zlzonedelivery.user.controller;
 
-import com.sparta.zlzonedelivery.user.controller.dto.GetUserResponseDto;
-import com.sparta.zlzonedelivery.user.controller.dto.findUserReponseDto;
+import com.sparta.zlzonedelivery.user.controller.dto.UserGetResponseDto;
+import com.sparta.zlzonedelivery.user.controller.dto.UserSearchResponseDto;
 import com.sparta.zlzonedelivery.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public GetUserResponseDto getUser(@PathVariable Long userId) {
+    public UserGetResponseDto getUser(@PathVariable Long userId) {
         return null;
     }
 
@@ -37,9 +37,9 @@ public class UserController {
     }
 
     @GetMapping
-    public Page<findUserReponseDto> searchUsers(@RequestParam("user-id") Long userId,
-                                                @RequestParam("nickname") String nickname,
-                                                Pageable pageable) {
+    public Page<UserSearchResponseDto> searchUsers(@RequestParam("user-id") Long userId,
+                                                   @RequestParam("nickname") String nickname,
+                                                   Pageable pageable) {
         return null;
     }
 
