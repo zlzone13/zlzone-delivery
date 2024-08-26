@@ -22,6 +22,8 @@ public class Store {
 
     //user_id
 
+    //category_id
+
     @Column(name = "store_name")
     private String storeName;
 
