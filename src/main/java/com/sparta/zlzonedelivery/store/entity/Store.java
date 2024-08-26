@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
@@ -58,6 +59,20 @@ public class Store extends BaseEntity {
 
     @Column(name = "country_info")
     private String countryInfo;
+
+    @Builder
+    protected Store(String storeName, String description, String announcement, String bNo,
+                    String telephoneNo, String deliveryArea, String openCloseTime,
+                    String countryInfo) {
+        this.storeName = storeName;
+        this.description = description;
+        this.announcement = announcement;
+        this.bNo = bNo;
+        this.telephoneNo = telephoneNo;
+        this.deliveryArea = deliveryArea;
+        this.openCloseTime = openCloseTime;
+        this.countryInfo = countryInfo;
+    }
 
 }
 
