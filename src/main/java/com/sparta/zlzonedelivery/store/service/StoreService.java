@@ -5,12 +5,13 @@ import com.sparta.zlzonedelivery.store.repository.StoreRepository;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreCreateRequestDto;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreReadResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,20 +55,24 @@ public class StoreService {
                 .build();
     }
 
-    public List<StoreReadResponseDto> getStoreAll() {
-        return storeRepository.findAllByIsPublicIsTrue().stream()
-                .map(store -> StoreReadResponseDto.builder()
-                        .storeName(store.getStoreName())
-                        .announcement(store.getAnnouncement())
-                        .description(store.getDescription())
-                        .bNo(store.getBNo())
-                        .telephoneNo(store.getTelephoneNo())
-                        .deliveryArea(store.getDeliveryArea())
-                        .openCloseTime(store.getOpenCloseTime())
-                        .countryInfo(store.getCountryInfo())
-                        .build())
-                .collect(Collectors.toList());
-    }
+    public Page<StoreReadResponseDto> getStoreAll(int page, int size) {
 
+        if (page < 0 || size <= 0) {
+            throw new IllegalArgumentException("페이지 번호는 0 이상이어야 하며, 크기는 1 이상이어야 합니다.");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return storeRepository.findAllByIsPublicIsTrue(pageable).map(store -> StoreReadResponseDto.builder()
+                .storeName(store.getStoreName())
+                .announcement(store.getAnnouncement())
+                .description(store.getDescription())
+                .bNo(store.getBNo())
+                .telephoneNo(store.getTelephoneNo())
+                .deliveryArea(store.getDeliveryArea())
+                .openCloseTime(store.getOpenCloseTime())
+                .countryInfo(store.getCountryInfo())
+                .build());
+    }
 
 }
