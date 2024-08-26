@@ -93,4 +93,8 @@ public class StoreService {
         ofNullable(requestDto.countryInfo()).ifPresent(store::updateCountryInfo);
     }
 
+    public void deleteStore(UUID uuid) {
+        storeRepository.deleteById(uuid);
+    }
+
 }
