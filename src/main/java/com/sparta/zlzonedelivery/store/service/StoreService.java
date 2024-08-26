@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class StoreService {
     public StoreReadResponseDto getStore(UUID storeId) {
 
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
-                ()-> new IllegalArgumentException("가게를 찾을 수 없습니다.")
+                () -> new IllegalArgumentException("가게를 찾을 수 없습니다.")
         );
 
         return StoreReadResponseDto.builder()
@@ -52,6 +54,20 @@ public class StoreService {
                 .build();
     }
 
+    public List<StoreReadResponseDto> getStoreAll() {
+        return storeRepository.findAllByIsPublicIsTrue().stream()
+                .map(store -> StoreReadResponseDto.builder()
+                        .storeName(store.getStoreName())
+                        .announcement(store.getAnnouncement())
+                        .description(store.getDescription())
+                        .bNo(store.getBNo())
+                        .telephoneNo(store.getTelephoneNo())
+                        .deliveryArea(store.getDeliveryArea())
+                        .openCloseTime(store.getOpenCloseTime())
+                        .countryInfo(store.getCountryInfo())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
 
 }
