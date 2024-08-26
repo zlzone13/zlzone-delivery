@@ -1,11 +1,14 @@
 package com.sparta.zlzonedelivery.store.entity;
 
 import com.sparta.zlzonedelivery.global.entity.BaseEntity;
+import com.sparta.zlzonedelivery.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -24,6 +27,9 @@ public class Store extends BaseEntity {
     private UUID id;
 
     //user_id
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     //category_id
 
