@@ -83,5 +83,29 @@ public class Store extends BaseEntity {
         this.countryInfo = countryInfo;
     }
 
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateAnnouncement(String announcement) {
+        this.announcement = announcement;
+    }
+
+    public void updateTelephoneNo(String telephoneNo) {
+        this.telephoneNo = telephoneNo;
+    }
+
+    public void updateDeliveryArea(String deliveryArea) {
+        this.deliveryArea = deliveryArea;
+    }
+
+    public void updateOpenCloseTime(String openCloseTime) {
+        this.openCloseTime = openCloseTime;
+    }
+
+    public void updateCountryInfo(String countryInfo) {
+        this.countryInfo = countryInfo;
+    }
+
 }
 
