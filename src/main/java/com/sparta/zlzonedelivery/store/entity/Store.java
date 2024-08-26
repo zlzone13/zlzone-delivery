@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
@@ -37,27 +38,35 @@ public class Store extends BaseEntity {
     //store_location_id
 
     @Column(name = "store_name", length = 100)
+    @Getter
     private String storeName;
 
     @Column
+    @Getter
     private String description;
 
     @Column
+    @Getter
     private String announcement;
 
     @Column(name = "b_no", length = 20)
+    @Getter
     private String bNo;
 
     @Column(name = "telephone_no", length = 20)
+    @Getter
     private String telephoneNo;
 
     @Column(name = "delivery_area", length = 100)
+    @Getter
     private String deliveryArea;
 
     @Column(name = "open_close_time")
+    @Getter
     private String openCloseTime;
 
     @Column(name = "country_info")
+    @Getter
     private String countryInfo;
 
     @Builder
