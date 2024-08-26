@@ -19,8 +19,10 @@ public class User extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(length = 10)
     private String username;
 
+    @Column(length = 10)
     private String nickname;
 
     @Column(unique = true)
@@ -28,6 +30,7 @@ public class User extends BaseEntity {
 
     private String password;
 
+    @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
