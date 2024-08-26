@@ -9,12 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_stores")
+@SQLDelete(sql = "UPDATE p_stores SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 public class Store extends BaseEntity {
 
     @Id
@@ -25,7 +27,9 @@ public class Store extends BaseEntity {
 
     //category_id
 
-    @Column(name = "store_name")
+    //store_location_id
+
+    @Column(name = "store_name", length = 100)
     private String storeName;
 
     @Column
@@ -34,13 +38,13 @@ public class Store extends BaseEntity {
     @Column
     private String announcement;
 
-    @Column(name = "b_no")
+    @Column(name = "b_no", length = 20)
     private String bNo;
 
-    @Column(name = "telephone_no")
+    @Column(name = "telephone_no", length = 20)
     private String telephoneNo;
 
-    @Column(name = "delivery_area")
+    @Column(name = "delivery_area", length = 100)
     private String deliveryArea;
 
     @Column(name = "open_close_time")
