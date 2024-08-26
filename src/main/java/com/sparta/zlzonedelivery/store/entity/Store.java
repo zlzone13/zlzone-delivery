@@ -1,6 +1,6 @@
 package com.sparta.zlzonedelivery.store.entity;
 
-import com.sparta.zlzonedelivery.global.entity.SoftDeletableBaseTimeEntity;
+import com.sparta.zlzonedelivery.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_stores")
-public class Store extends SoftDeletableBaseTimeEntity {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
