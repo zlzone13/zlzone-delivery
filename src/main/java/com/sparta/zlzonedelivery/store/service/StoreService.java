@@ -7,7 +7,6 @@ import com.sparta.zlzonedelivery.store.service.dtos.StoreReadResponseDto;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,13 +59,7 @@ public class StoreService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StoreReadResponseDto> getStoreAll(int page, int size) {
-
-        if (page < 0 || size <= 0) {
-            throw new IllegalArgumentException("페이지 번호는 0 이상이어야 하며, 크기는 1 이상이어야 합니다.");
-        }
-
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<StoreReadResponseDto> getStoreAll(Pageable pageable) {
 
         return storeRepository.findAllByIsPublicIsTrue(pageable).map(store -> StoreReadResponseDto.builder()
                 .storeName(store.getStoreName())
