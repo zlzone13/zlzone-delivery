@@ -67,9 +67,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(ProductUpdateRequestDto requestDto) {
+    public void updateProduct(UUID productId, ProductUpdateRequestDto requestDto) {
 
-        Product product = productRepository.findByIdAndIsPublicIsTrue(requestDto.productId())
+        Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
         product.updateProduct(requestDto.name(), requestDto.description(),
