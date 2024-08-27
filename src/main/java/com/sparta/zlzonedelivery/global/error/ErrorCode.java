@@ -46,7 +46,10 @@ public enum ErrorCode {
 
     // Chatbot
     CHATBOT_UNAVAILABLE("CHATBOT_UNAVAILABLE", "일시적으로 Chatbot 서비스를 사용할 수 없습니다.", 503),
-    CHATBOT_GENERATION_FAILED("CHATBOT_GENERATION_FAILED", "상품 설명 생성이 실패했습니다.", 500);
+    CHATBOT_GENERATION_FAILED("CHATBOT_GENERATION_FAILED", "상품 설명 생성이 실패했습니다.", 500),
+
+    //ProductCategory
+    PRODUCT_CATEGORY_NOT_FOUND("PRODUCT_CATEGORY_NOT_FOUND", "상품에 대한 카테고리를 찾을 수 없습니다.", 404);
 
     private final String code;
 
