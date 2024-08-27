@@ -62,6 +62,7 @@ public class StoreService {
     public Page<StoreReadResponseDto> getStoreAll(Pageable pageable) {
 
         return storeRepository.findAllByIsPublicIsTrue(pageable).map(store -> StoreReadResponseDto.builder()
+                .storeId(store.getId())
                 .storeName(store.getStoreName())
                 .announcement(store.getAnnouncement())
                 .description(store.getDescription())
