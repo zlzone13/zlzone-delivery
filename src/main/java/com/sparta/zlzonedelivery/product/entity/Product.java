@@ -50,12 +50,18 @@ public class Product extends BaseEntity {
     @Getter
     private Store store;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    @Getter
+    private ProductCategory productCategory;
+
     @Builder
-    public Product(String name, String description, Integer price, Store store) {
+    public Product(String name, String description, Integer price, Store store, ProductCategory productCategory) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.store = store;
+        this.productCategory = productCategory;
     }
 
 
