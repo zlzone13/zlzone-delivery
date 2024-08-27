@@ -6,6 +6,7 @@ import com.sparta.zlzonedelivery.product.entity.Product;
 import com.sparta.zlzonedelivery.product.repository.ProductRepository;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductCreateRequestDto;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductReadResponseDto;
+import com.sparta.zlzonedelivery.product.service.dtos.ProductUpdateRequestDto;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,23 @@ public class ProductService {
                         .description(product.getDescription())
                         .price(product.getPrice())
                         .build());
+    }
+
+    @Transactional
+    public void updateProduct(ProductUpdateRequestDto requestDto) {
+
+        Product product = productRepository.findByIdAndIsPublicIsTrue(requestDto.productId())
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+
+        product.updateProduct(requestDto.name(), requestDto.description(),
+                requestDto.price(), requestDto.isShown());
+
+    }
+
+    @Transactional
+    public void deleteProduct(UUID productId) {
+
+        productRepository.deleteById(productId);
     }
 
 }
