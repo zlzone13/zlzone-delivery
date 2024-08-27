@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
@@ -37,10 +38,18 @@ public class Product extends BaseEntity {
     private Integer price;
 
     @Column(name = "is_shown")
-    private Boolean isShown;
+    private Boolean shown = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @Builder
+    public Product(String name, String description, Integer price, Store store) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.store = store;
+    }
 
 }
