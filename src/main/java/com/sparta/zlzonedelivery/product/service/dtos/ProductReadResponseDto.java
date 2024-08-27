@@ -9,7 +9,8 @@ public record ProductReadResponseDto(
         UUID productId,
         String name,
         String description,
-        Integer price
+        Integer price,
+        String productCategory
 ) {
 
 }

@@ -1,6 +1,7 @@
 package com.sparta.zlzonedelivery.product.repository;
 
 import com.sparta.zlzonedelivery.product.entity.Product;
+import com.sparta.zlzonedelivery.product.entity.ProductCategory;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     Optional<Product> findByIdAndIsPublicIsTrue(UUID productId);
 
     Page<Product> findAllByStoreAndIsPublicIsTrue(Store store, Pageable pageable);
+
+    Page<Product> searchByProductCategoryAndIsPublicIsTrueOrderByPrice(ProductCategory productCategory, Pageable pageable);
 
 }
