@@ -17,12 +17,13 @@ import static java.util.Optional.ofNullable;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class StoreService {
 
     private final StoreRepository storeRepository;
 
     //TODO: JWT 설정 시 User 추가
+    @Transactional
     public void createStore(StoreCreateRequestDto requestDto) {
 
         Store store = Store.builder()
@@ -39,7 +40,6 @@ public class StoreService {
         storeRepository.save(store);
     }
 
-    @Transactional(readOnly = true)
     public StoreReadResponseDto getStore(UUID storeId) {
 
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
@@ -58,7 +58,6 @@ public class StoreService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
     public Page<StoreReadResponseDto> getStoreAll(Pageable pageable) {
 
         return storeRepository.findAllByIsPublicIsTrue(pageable).map(store -> StoreReadResponseDto.builder()
@@ -73,19 +72,23 @@ public class StoreService {
                 .build());
     }
 
+    @Transactional
     public void updateStore(UUID storeId, StoreUpdateRequestDto requestDto) {
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
                 () -> new IllegalArgumentException("가게를 찾을 수 없습니다.")
         );
 
-        ofNullable(requestDto.description()).ifPresent(store::updateDescription);
-        ofNullable(requestDto.announcement()).ifPresent(store::updateAnnouncement);
-        ofNullable(requestDto.telephoneNo()).ifPresent(store::updateTelephoneNo);
-        ofNullable(requestDto.openCloseTime()).ifPresent(store::updateOpenCloseTime);
-        ofNullable(requestDto.deliveryArea()).ifPresent(store::updateDeliveryArea);
-        ofNullable(requestDto.countryInfo()).ifPresent(store::updateCountryInfo);
+        store.updateStore(
+                requestDto.description(),
+                requestDto.announcement(),
+                requestDto.telephoneNo(),
+                requestDto.deliveryArea(),
+                requestDto.openCloseTime(),
+                requestDto.countryInfo()
+        );
     }
 
+    @Transactional
     public void deleteStore(UUID uuid) {
         storeRepository.deleteById(uuid);
     }
