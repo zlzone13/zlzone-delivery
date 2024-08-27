@@ -73,8 +73,8 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(StoreUpdateRequestDto requestDto) {
-        Store store = storeRepository.findByIdAndIsPublicIsTrue(requestDto.storeId()).orElseThrow(
+    public void updateStore(UUID storeId, StoreUpdateRequestDto requestDto) {
+        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
                 () -> new IllegalArgumentException("가게를 찾을 수 없습니다.")
         );
 
