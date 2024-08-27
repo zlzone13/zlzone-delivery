@@ -47,6 +47,7 @@ public class StoreService {
         );
 
         return StoreReadResponseDto.builder()
+                .storeId(store.getId())
                 .storeName(store.getStoreName())
                 .announcement(store.getAnnouncement())
                 .description(store.getDescription())
