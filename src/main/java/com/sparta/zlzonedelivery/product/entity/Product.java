@@ -57,7 +57,7 @@ public class Product extends BaseEntity {
         this.store = store;
     }
 
-    @Builder
+
     public void updateProduct(String name, String description, Integer price, Boolean isShown) {
         this.name = name;
         this.description = description;
