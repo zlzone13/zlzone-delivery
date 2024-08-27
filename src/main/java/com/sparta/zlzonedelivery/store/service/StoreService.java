@@ -1,5 +1,7 @@
 package com.sparta.zlzonedelivery.store.service;
 
+import com.sparta.zlzonedelivery.global.error.CustomException;
+import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreCreateRequestDto;
@@ -12,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 @RequiredArgsConstructor
@@ -89,8 +89,12 @@ public class StoreService {
     }
 
     @Transactional
-    public void deleteStore(UUID uuid) {
-        storeRepository.deleteById(uuid);
+    public void deleteStore(UUID storeId) {
+
+        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+        storeRepository.deleteById(store.getId());
     }
 
 }
