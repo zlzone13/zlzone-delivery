@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -67,4 +68,12 @@ public class ProductController {
         return ResponseDto.ok();
     }
 
+    @GetMapping("/{store_id}/products/category/")
+    public ResponseDto<Page<ProductReadResponseDto>> searchByCategory(
+            @PathVariable("store_id") UUID storeId,
+            @RequestParam("category_name") String categoryName,
+            @PageableDefault Pageable pageable) {
+
+        return ResponseDto.okWithData(productService.searchByCategory(storeId, categoryName, pageable));
+    }
 }
