@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/stores/")
+@RequestMapping("/api/v1/stores")
 public class StoreController {
 
     private final StoreService storeService;
