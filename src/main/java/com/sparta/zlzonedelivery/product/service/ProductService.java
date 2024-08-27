@@ -27,9 +27,9 @@ public class ProductService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public void createProduct(ProductCreateRequestDto requestDto) {
+    public void createProduct(UUID storeId, ProductCreateRequestDto requestDto) {
 
-        Store store = storeRepository.findByIdAndIsPublicIsTrue(requestDto.storeId())
+        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
         Product product = Product.builder()
@@ -42,10 +42,14 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public ProductReadResponseDto getProduct(UUID productId) {
+    public ProductReadResponseDto getProduct(UUID storeId ,UUID productId) {
 
         Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+
+        if(!storeId.equals(product.getStore().getId())) {
+            throw new CustomException(ErrorCode.INVALID_STORE);
+        }
 
         return ProductReadResponseDto.builder()
                 .productId(product.getId())
@@ -55,9 +59,12 @@ public class ProductService {
                 .build();
     }
 
-    public Page<ProductReadResponseDto> getProductAll(Pageable pageable) {
+    public Page<ProductReadResponseDto> getProductAll(UUID storeId, Pageable pageable) {
 
-        return productRepository.findAllByIsPublicIsTrue(pageable)
+        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
+                .orElseThrow(()->new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+        return productRepository.findAllByStoreAndIsPublicIsTrue(store, pageable)
                 .map(product -> ProductReadResponseDto.builder()
                         .productId(product.getId())
                         .name(product.getName())
@@ -67,10 +74,14 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(UUID productId, ProductUpdateRequestDto requestDto) {
+    public void updateProduct(UUID storeId, UUID productId, ProductUpdateRequestDto requestDto) {
 
         Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+
+        if(!storeId.equals(product.getStore().getId())) {
+            throw new CustomException(ErrorCode.INVALID_STORE);
+        }
 
         product.updateProduct(requestDto.name(), requestDto.description(),
                 requestDto.price(), requestDto.isShown());
@@ -78,9 +89,16 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(UUID productId) {
+    public void deleteProduct(UUID storeId, UUID productId) {
 
-        productRepository.deleteById(productId);
+        Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+
+        if(!storeId.equals(product.getStore().getId())) {
+            throw new CustomException(ErrorCode.INVALID_STORE);
+        }
+
+        productRepository.deleteById(product.getId());
     }
 
 }

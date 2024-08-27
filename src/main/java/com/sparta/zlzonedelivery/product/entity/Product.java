@@ -47,6 +47,7 @@ public class Product extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
+    @Getter
     private Store store;
 
     @Builder
