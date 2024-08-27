@@ -5,11 +5,16 @@ import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.product.entity.Product;
 import com.sparta.zlzonedelivery.product.repository.ProductRepository;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductCreateRequestDto;
+import com.sparta.zlzonedelivery.product.service.dtos.ProductReadResponseDto;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +39,30 @@ public class ProductService {
                 .build();
 
         productRepository.save(product);
+    }
+
+    public ProductReadResponseDto getProduct(UUID productId) {
+
+        Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+
+        return ProductReadResponseDto.builder()
+                .productId(product.getId())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .name(product.getName())
+                .build();
+    }
+
+    public Page<ProductReadResponseDto> getProductAll(Pageable pageable) {
+
+        return productRepository.findAllByIsPublicIsTrue(pageable)
+                .map(product -> ProductReadResponseDto.builder()
+                        .productId(product.getId())
+                        .name(product.getName())
+                        .description(product.getDescription())
+                        .price(product.getPrice())
+                        .build());
     }
 
 }
