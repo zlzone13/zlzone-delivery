@@ -45,10 +45,9 @@ public class StoreController {
     }
 
 
-    @PatchMapping("/{store_id}")
-    public ResponseDto<Void> updateStore(@PathVariable("store_id") UUID storeId,
-                                         @RequestBody StoreUpdateRequestDto requestDto) {
-        storeService.updateStore(storeId, requestDto);
+    @PatchMapping
+    public ResponseDto<Void> updateStore(@RequestBody StoreUpdateRequestDto requestDto) {
+        storeService.updateStore(requestDto);
         return ResponseDto.ok();
     }
 
