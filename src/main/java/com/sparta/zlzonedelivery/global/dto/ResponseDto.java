@@ -1,6 +1,7 @@
 package com.sparta.zlzonedelivery.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -46,13 +47,13 @@ public class ResponseDto<T> {
                 .build();
     }
 
-//    public static ResponseDto<Void> error(ErrorCode errorCode) {
-//        return ResponseDto.<Void>builder()
-//                .code(errorCode.getHttpStatus().value())
-//                .message(errorCode.getMessage())
-//                .data(null)
-//                .build();
-//    }
+    public static ResponseDto<Void> error(ErrorCode errorCode) {
+        return ResponseDto.<Void>builder()
+                .code(errorCode.getStatus())
+                .message(errorCode.getMessage())
+                .data(null)
+                .build();
+    }
 
     public static <T> ResponseDto<T> errorWithMessage(HttpStatus httpStatus, String errorMessage) {
         return ResponseDto.<T>builder()
