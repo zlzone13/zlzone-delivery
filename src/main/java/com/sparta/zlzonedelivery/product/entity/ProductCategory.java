@@ -25,7 +25,6 @@ public class ProductCategory extends BaseEntity {
     @Getter
     private String productCategoryName;
 
-    @Builder
     public ProductCategory(String productCategoryName) {
         this.productCategoryName = productCategoryName;
     }
