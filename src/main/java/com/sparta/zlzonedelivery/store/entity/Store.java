@@ -4,6 +4,7 @@ import com.sparta.zlzonedelivery.global.entity.BaseEntity;
 import com.sparta.zlzonedelivery.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +31,7 @@ public class Store extends BaseEntity {
     private UUID id;
 
     //user_id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
