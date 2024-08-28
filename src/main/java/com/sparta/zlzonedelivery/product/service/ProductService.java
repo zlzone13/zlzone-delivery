@@ -36,9 +36,7 @@ public class ProductService {
         Store store = storeService.findStoreById(storeId);
 
         ProductCategory productCategory = productCategoryRepository.findByProductCategoryNameAndIsPublicIsTrue(requestDto.productCategory())
-                .orElseGet(() -> productCategoryRepository.save(ProductCategory.builder()
-                        .productCategoryName(requestDto.productCategory())
-                        .build()));
+                .orElseGet(() -> productCategoryRepository.save(new ProductCategory(requestDto.productCategory())));
 
         Product product = Product.builder()
                 .name(requestDto.name())
