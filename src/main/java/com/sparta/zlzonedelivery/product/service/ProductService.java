@@ -10,7 +10,7 @@ import com.sparta.zlzonedelivery.product.service.dtos.ProductCreateRequestDto;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductReadResponseDto;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductUpdateRequestDto;
 import com.sparta.zlzonedelivery.store.entity.Store;
-import com.sparta.zlzonedelivery.store.repository.StoreRepository;
+import com.sparta.zlzonedelivery.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +26,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    private final StoreRepository storeRepository;
+    private final StoreService storeService;
 
     private final ProductCategoryRepository productCategoryRepository;
 
     @Transactional
     public void createProduct(UUID storeId, ProductCreateRequestDto requestDto) {
 
-        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+        Store store = storeService.findStoreById(storeId);
 
         ProductCategory productCategory = productCategoryRepository.findByProductCategoryNameAndIsPublicIsTrue(requestDto.productCategory())
                 .orElseGet(() -> productCategoryRepository.save(ProductCategory.builder()
@@ -61,28 +60,15 @@ public class ProductService {
             throw new CustomException(ErrorCode.INVALID_STORE);
         }
 
-        return ProductReadResponseDto.builder()
-                .productId(product.getId())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .name(product.getName())
-                .productCategory(product.getProductCategory().getProductCategoryName())
-                .build();
+        return ProductReadResponseDto.fromEntity(product);
     }
 
     public Page<ProductReadResponseDto> getProductAll(UUID storeId, Pageable pageable) {
 
-        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+        Store store = storeService.findStoreById(storeId);
 
         return productRepository.findAllByStoreAndIsPublicIsTrue(store, pageable)
-                .map(product -> ProductReadResponseDto.builder()
-                        .productId(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .price(product.getPrice())
-                        .productCategory(product.getProductCategory().getProductCategoryName())
-                        .build());
+                .map(ProductReadResponseDto::fromEntity);
     }
 
     @Transactional
@@ -115,20 +101,13 @@ public class ProductService {
 
     public Page<ProductReadResponseDto> searchByCategory(UUID storeId, String categoryName, Pageable pageable) {
 
-        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+        storeService.existStoreById(storeId);
 
         ProductCategory productCategory = productCategoryRepository.findByProductCategoryNameAndIsPublicIsTrue(categoryName)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND));
 
         return productRepository.searchByProductCategoryAndIsPublicIsTrueOrderByPrice(productCategory, pageable)
-                .map(product -> ProductReadResponseDto.builder()
-                        .productId(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .price(product.getPrice())
-                        .productCategory(product.getProductCategory().getProductCategoryName())
-                        .build());
+                .map(ProductReadResponseDto::fromEntity);
     }
 
 }
