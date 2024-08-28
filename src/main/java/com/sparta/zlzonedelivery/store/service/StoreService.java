@@ -1,5 +1,7 @@
 package com.sparta.zlzonedelivery.store.service;
 
+import com.sparta.zlzonedelivery.global.error.CustomException;
+import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreCreateRequestDto;
@@ -12,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 @RequiredArgsConstructor
@@ -43,39 +43,22 @@ public class StoreService {
     public StoreReadResponseDto getStore(UUID storeId) {
 
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
-                () -> new IllegalArgumentException("가게를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.STORE_NOT_FOUND)
         );
 
-        return StoreReadResponseDto.builder()
-                .storeName(store.getStoreName())
-                .announcement(store.getAnnouncement())
-                .description(store.getDescription())
-                .bNo(store.getBNo())
-                .telephoneNo(store.getTelephoneNo())
-                .deliveryArea(store.getDeliveryArea())
-                .openCloseTime(store.getOpenCloseTime())
-                .countryInfo(store.getCountryInfo())
-                .build();
+        return StoreReadResponseDto.fromEntity(store);
     }
 
     public Page<StoreReadResponseDto> getStoreAll(Pageable pageable) {
 
-        return storeRepository.findAllByIsPublicIsTrue(pageable).map(store -> StoreReadResponseDto.builder()
-                .storeName(store.getStoreName())
-                .announcement(store.getAnnouncement())
-                .description(store.getDescription())
-                .bNo(store.getBNo())
-                .telephoneNo(store.getTelephoneNo())
-                .deliveryArea(store.getDeliveryArea())
-                .openCloseTime(store.getOpenCloseTime())
-                .countryInfo(store.getCountryInfo())
-                .build());
+        return storeRepository.findAllByIsPublicIsTrue(pageable)
+                .map(StoreReadResponseDto::fromEntity);
     }
 
     @Transactional
     public void updateStore(UUID storeId, StoreUpdateRequestDto requestDto) {
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId).orElseThrow(
-                () -> new IllegalArgumentException("가게를 찾을 수 없습니다.")
+                () -> new CustomException(ErrorCode.STORE_NOT_FOUND)
         );
 
         store.updateStore(
@@ -89,8 +72,22 @@ public class StoreService {
     }
 
     @Transactional
-    public void deleteStore(UUID uuid) {
-        storeRepository.deleteById(uuid);
+    public void deleteStore(UUID storeId) {
+
+        Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+        storeRepository.deleteById(store.getId());
     }
 
+     public Store findStoreById(UUID storeId) {
+        return storeRepository.findByIdAndIsPublicIsTrue(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+    }
+
+    public void existStoreById(UUID storeId) {
+        if(!storeRepository.existsByIdAndIsPublicIsTrue(storeId)) {
+            throw new CustomException(ErrorCode.STORE_NOT_FOUND);
+        }
+    }
 }

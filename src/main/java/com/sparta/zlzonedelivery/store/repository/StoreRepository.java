@@ -14,4 +14,6 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {
 
     Page<Store> findAllByIsPublicIsTrue(Pageable pageable);
 
+    boolean existsByIdAndIsPublicIsTrue(UUID uuid);
+
 }
