@@ -3,7 +3,7 @@ package com.sparta.zlzonedelivery.chatbot.controller;
 import com.sparta.zlzonedelivery.chatbot.service.ChatBotService;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotCreateRequestDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotCreateResponseDto;
-import com.sparta.zlzonedelivery.chatbot.service.dtos.ServiceCreateDto;
+import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotServiceCreateDto;
 import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
@@ -36,9 +36,9 @@ public class ChatBotController {
         }
 
         String response = openAiChatModel.call(requestDto.query());
-        ServiceCreateDto serviceCreateDto = new ServiceCreateDto(requestDto.query(), response, userDetails.getUser());
+        ChatBotServiceCreateDto chatBotServiceCreateDto = new ChatBotServiceCreateDto(requestDto.query(), response, userDetails.getUser());
 
-        return chatBotService.createAnswer(serviceCreateDto);
+        return chatBotService.createAnswer(chatBotServiceCreateDto);
     }
 
 
