@@ -5,6 +5,7 @@ import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotCreateRequestDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotCreateResponseDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotReadResponseDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotServiceCreateDto;
+import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotServiceSearchDto;
 import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.global.dto.ResponseDto;
 import com.sparta.zlzonedelivery.global.error.CustomException;
@@ -76,6 +77,17 @@ public class ChatBotController {
         chatBotService.deleteQueryAndAnswer(id);
 
         return ResponseDto.ok();
+    }
+
+    @GetMapping("/user")
+    public ResponseDto<Page<ChatBotReadResponseDto>> searchQueryAndAnswerByUser(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                @PageableDefault Pageable pageable) {
+
+        validateUser(userDetails);
+
+        ChatBotServiceSearchDto serviceSearchDto = new ChatBotServiceSearchDto(pageable, userDetails.getUser());
+
+        return ResponseDto.okWithData(chatBotService.searchByUser(serviceSearchDto));
     }
 
     private static void validateUser(UserDetailsImpl userDetails) {
