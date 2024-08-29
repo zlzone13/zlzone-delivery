@@ -61,12 +61,19 @@ public class ProductService {
         return ProductReadResponseDto.fromEntity(product);
     }
 
-    public Page<ProductReadResponseDto> getProductAll(UUID storeId, Pageable pageable) {
+    public Page<ProductReadResponseDto> getAllProductByStore(UUID storeId, Pageable pageable) {
 
         Store store = storeService.findStoreById(storeId);
 
-        return productRepository.findAllByStoreAndIsPublicIsTrue(store, pageable)
+        return productRepository.findAllByStoreAndIsPublicIsTrueOrderByPrice(store, pageable)
                 .map(ProductReadResponseDto::fromEntity);
+    }
+
+    public Page<ProductReadResponseDto> getAllProduct(Pageable pageable) {
+
+        return productRepository.findAllByIsPublicIsTrueOrderByPrice(pageable)
+                .map(ProductReadResponseDto::fromEntity);
+
     }
 
     @Transactional
