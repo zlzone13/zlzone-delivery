@@ -96,7 +96,9 @@ public class CategoryService {
             throw new CustomException(ErrorCode.DUPLICATED_CATEGORY);
         }
 
-        category.updateCategory(categoryName);
+        Category newCategory = category.updateCategory(categoryName);
+
+        categoryRepository.save(newCategory);
     }
 
     @Transactional
