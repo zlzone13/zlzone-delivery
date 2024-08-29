@@ -40,3 +40,5 @@ spring:
   ai:
     openai:
       api-key: ${GPT_API_KEY}
+    retry:
+      max-attempts: 2
