@@ -11,6 +11,9 @@ import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +50,20 @@ public class ChatBotController {
                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         validateUser(userDetails);
         return chatBotService.getQueryAndAnswer(uuid);
+    }
+
+    @GetMapping
+    public Page<ChatBotReadResponseDto> getAllQueryAndAnswer(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PageableDefault Pageable pageable) {
+        UserRole role = userDetails.getRole();
+
+        if (role.getValue().equals("CUSTOMER") || role.getValue().equals("OWNER")) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
+        return chatBotService.getAllQueryAndAnswer(pageable);
+
     }
 
     private static void validateUser(UserDetailsImpl userDetails) {

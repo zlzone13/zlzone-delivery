@@ -10,6 +10,8 @@ import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,11 @@ public class ChatBotService {
 
         return  ChatBotReadResponseDto.fromEntity(chatBotRepository.findByIdAndIsPublicIsTrue(chatbotId)
                 .orElseThrow(()->new CustomException(ErrorCode.QUERY_AND_ANSWER_NOT_FOUND)));
+    }
+
+    public Page<ChatBotReadResponseDto> getAllQueryAndAnswer(Pageable pageable) {
+        return chatBotRepository.findAllByIsPublicIsTrue(pageable)
+                .map(ChatBotReadResponseDto::fromEntity);
     }
 
 }
