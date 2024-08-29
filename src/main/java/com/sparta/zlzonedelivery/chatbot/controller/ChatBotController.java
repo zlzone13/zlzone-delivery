@@ -6,6 +6,7 @@ import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotCreateResponseDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotReadResponseDto;
 import com.sparta.zlzonedelivery.chatbot.service.dtos.ChatBotServiceCreateDto;
 import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
+import com.sparta.zlzonedelivery.global.dto.ResponseDto;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.user.UserRole;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,26 +36,26 @@ public class ChatBotController {
     private final OpenAiChatModel openAiChatModel;
 
     @PostMapping
-    public ChatBotCreateResponseDto createAnswer(@RequestBody ChatBotCreateRequestDto requestDto,
-                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<ChatBotCreateResponseDto> createAnswer(@RequestBody ChatBotCreateRequestDto requestDto,
+                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         validateUser(userDetails);
 
         String response = openAiChatModel.call(requestDto.query());
         ChatBotServiceCreateDto chatBotServiceCreateDto = new ChatBotServiceCreateDto(requestDto.query(), response, userDetails.getUser());
 
-        return chatBotService.createAnswer(chatBotServiceCreateDto);
+        return ResponseDto.okWithData(chatBotService.createAnswer(chatBotServiceCreateDto));
     }
 
     @GetMapping("/{chat-bot_id}")
-    public ChatBotReadResponseDto getQueryAndAnswer(@PathVariable("chat-bot_id") UUID uuid,
+    public ResponseDto<ChatBotReadResponseDto> getQueryAndAnswer(@PathVariable("chat-bot_id") UUID uuid,
                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         validateUser(userDetails);
-        return chatBotService.getQueryAndAnswer(uuid);
+        return ResponseDto.okWithData(chatBotService.getQueryAndAnswer(uuid));
     }
 
     @GetMapping
-    public Page<ChatBotReadResponseDto> getAllQueryAndAnswer(
+    public ResponseDto<Page<ChatBotReadResponseDto>> getAllQueryAndAnswer(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PageableDefault Pageable pageable) {
         UserRole role = userDetails.getRole();
@@ -62,8 +64,18 @@ public class ChatBotController {
             throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
 
-        return chatBotService.getAllQueryAndAnswer(pageable);
+        return ResponseDto.okWithData(chatBotService.getAllQueryAndAnswer(pageable));
 
+    }
+
+    @DeleteMapping("/{chat-bot_id}")
+    public ResponseDto<Void> deleteQueryAndAnswer(@PathVariable("chat-bot_id") UUID id,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        validateUser(userDetails);
+
+        chatBotService.deleteQueryAndAnswer(id);
+
+        return ResponseDto.ok();
     }
 
     private static void validateUser(UserDetailsImpl userDetails) {

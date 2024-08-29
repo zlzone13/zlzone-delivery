@@ -50,4 +50,11 @@ public class ChatBotService {
                 .map(ChatBotReadResponseDto::fromEntity);
     }
 
+    public void deleteQueryAndAnswer(UUID id) {
+        ChatBot chatBot = chatBotRepository.findByIdAndIsPublicIsTrue(id)
+                .orElseThrow(()->new CustomException(ErrorCode.QUERY_AND_ANSWER_NOT_FOUND));
+
+        chatBotRepository.deleteById(chatBot.getId());
+    }
+
 }
