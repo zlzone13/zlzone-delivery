@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_categories")
 @SQLDelete(sql = "UPDATE p_categories SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 public class Category extends BaseEntity {
@@ -42,8 +43,16 @@ public class Category extends BaseEntity {
         this.categoryName = categoryName;
     }
 
-    public void updateCategory(String categoryName) {
+    public Category(UUID id, String categoryName) {
+        this.id = id;
         this.categoryName = categoryName;
+    }
+
+    public Category updateCategory(String categoryName) {
+        return new Category(
+                this.id,
+                categoryName != null ? categoryName : this.categoryName
+        );
     }
 
 }

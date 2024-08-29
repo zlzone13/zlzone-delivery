@@ -1,5 +1,6 @@
 package com.sparta.zlzonedelivery.user.controller;
 
+import com.sparta.zlzonedelivery.user.User;
 import com.sparta.zlzonedelivery.user.controller.dto.UserGetResponseDto;
 import com.sparta.zlzonedelivery.user.controller.dto.UserSearchResponseDto;
 import com.sparta.zlzonedelivery.user.service.UserService;
@@ -23,7 +24,8 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserGetResponseDto getUser(@PathVariable Long userId) {
-        return null;
+        User user = userService.getUser(userId);
+        return new UserGetResponseDto(user);
     }
 
     @PatchMapping("/{userId}")
