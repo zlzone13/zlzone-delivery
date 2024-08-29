@@ -4,6 +4,7 @@ spring:
       on-profile: local
     import:
     - optional:classpath:application-jwt.yml
+    - optional:file:.env[.properties]
   application:
     name: zlzone-delivery
 
@@ -36,3 +37,6 @@ spring:
 
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+  ai:
+    openai:
+      api-key: ${GPT_API_KEY}
