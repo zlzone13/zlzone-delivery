@@ -5,7 +5,6 @@ import com.sparta.zlzonedelivery.product.service.ProductService;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductCreateRequestDto;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductReadResponseDto;
 import com.sparta.zlzonedelivery.product.service.dtos.ProductUpdateRequestDto;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +39,7 @@ public class ProductController {
     @GetMapping("/{store_id}/products/{product_id}")
     public ResponseDto<ProductReadResponseDto> getProduct(@PathVariable("store_id") UUID storeId,
                                                           @PathVariable("product_id") UUID productId) {
-        return ResponseDto.okWithData(productService.getProduct(storeId, productId));
+        return ResponseDto.okWithData(productService.getProductByStoreId(storeId, productId));
     }
 
     @GetMapping("/{store_id}/products")

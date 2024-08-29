@@ -49,7 +49,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public ProductReadResponseDto getProduct(UUID storeId, UUID productId) {
+    public ProductReadResponseDto getProductByStoreId(UUID storeId, UUID productId) {
 
         Product product = productRepository.findByIdAndIsPublicIsTrue(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
