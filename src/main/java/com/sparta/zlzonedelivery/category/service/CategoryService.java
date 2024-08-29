@@ -56,16 +56,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        return new CategorySingleResponseDto(
-                category.getId(),
-                category.getCategoryName(),
-                category.getCreatedAt(),
-                category.getCreatedBy(),
-                category.getUpdatedAt(),
-                category.getUpdatedBy(),
-                category.getDeletedAt(),
-                category.getDeletedBy()
-        );
+        return CategorySingleResponseDto.fromCategory(category);
     }
 
     public Page<StoreListByCategoryResponseDto> getStoresByCategory(UUID categoryId, Pageable pageable) {
