@@ -2,7 +2,8 @@ spring:
   config:
     activate:
       on-profile: local
-
+    import:
+    - optional:classpath:application-jwt.yml
   application:
     name: zlzone-delivery
 
@@ -13,7 +14,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:./test;MODE=PostgreSQL;
+    url: jdbc:h2:./test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
     username: sa
     password: sa
 
