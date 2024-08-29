@@ -37,7 +37,7 @@ public class ChatBotController {
 
     @PostMapping
     public ResponseDto<ChatBotCreateResponseDto> createAnswer(@RequestBody ChatBotCreateRequestDto requestDto,
-                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         validateUser(userDetails);
 
@@ -49,7 +49,7 @@ public class ChatBotController {
 
     @GetMapping("/{chat-bot_id}")
     public ResponseDto<ChatBotReadResponseDto> getQueryAndAnswer(@PathVariable("chat-bot_id") UUID uuid,
-                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
         validateUser(userDetails);
         return ResponseDto.okWithData(chatBotService.getQueryAndAnswer(uuid));
     }
@@ -85,6 +85,5 @@ public class ChatBotController {
             throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
     }
-
 
 }
