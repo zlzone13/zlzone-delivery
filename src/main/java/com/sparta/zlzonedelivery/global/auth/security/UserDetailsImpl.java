@@ -13,8 +13,11 @@ public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
+    private UserRole userRole;
+
     public UserDetailsImpl(User user) {
         this.user = user;
+        this.userRole = user.getRole();
     }
 
     @Override
@@ -41,6 +44,10 @@ public class UserDetailsImpl implements UserDetails {
 
     public UserRole getRole() {
         return user.getRole();
+    }
+
+    public boolean hasRole(UserRole role) {
+        return this.userRole == role;
     }
 
 }

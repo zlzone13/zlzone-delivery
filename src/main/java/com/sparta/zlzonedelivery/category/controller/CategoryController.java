@@ -7,12 +7,17 @@ import com.sparta.zlzonedelivery.category.service.dto.CategorySearchResponseDto;
 import com.sparta.zlzonedelivery.category.service.dto.CategorySingleResponseDto;
 import com.sparta.zlzonedelivery.category.service.dto.CategoryUpdateRequestDto;
 import com.sparta.zlzonedelivery.category.service.dto.StoreListByCategoryResponseDto;
+import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
+import com.sparta.zlzonedelivery.global.error.CustomException;
+import com.sparta.zlzonedelivery.global.error.ErrorCode;
+import com.sparta.zlzonedelivery.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,9 +38,14 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Void> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto/*,
-                               @AuthenticationPrincipal UserDetailsImpl userDetails*/) {
-        categoryService.createCategory(categoryCreateRequestDto/*, userDetails*/);
+    public ResponseEntity<Void> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto,
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
+        categoryService.createCategory(categoryCreateRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -46,7 +56,13 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategorySingleResponseDto> getSingleCategory(@PathVariable UUID categoryId) {
+    public ResponseEntity<CategorySingleResponseDto> getSingleCategory(@PathVariable UUID categoryId,
+                                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
         CategorySingleResponseDto categoryDetail = categoryService.getSingleCategory(categoryId);
         return new ResponseEntity<>(categoryDetail, HttpStatus.OK);
     }
@@ -68,8 +84,14 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId) {
-        categoryService.deleteCategory(categoryId);
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId,
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
+        categoryService.deleteCategory(categoryId, userDetails);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
