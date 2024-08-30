@@ -1,7 +1,9 @@
 package com.sparta.zlzonedelivery.store.entity;
 
 import com.sparta.zlzonedelivery.global.entity.BaseEntity;
+import com.sparta.zlzonedelivery.relationship.StoreCategory;
 import com.sparta.zlzonedelivery.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +41,9 @@ public class Store extends BaseEntity {
     private User user;
 
     //category_id
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter
+    private List<StoreCategory> storeCategoryList = new ArrayList<>();
 
     //store_location_id
 
@@ -74,7 +82,7 @@ public class Store extends BaseEntity {
     @Builder
     protected Store(String storeName, String description, String announcement, String bNo,
                     String telephoneNo, String deliveryArea, String openCloseTime,
-                    String countryInfo) {
+                    String countryInfo, User user) {
         this.storeName = storeName;
         this.description = description;
         this.announcement = announcement;
@@ -83,6 +91,7 @@ public class Store extends BaseEntity {
         this.deliveryArea = deliveryArea;
         this.openCloseTime = openCloseTime;
         this.countryInfo = countryInfo;
+        this.user = user;
     }
 
     public void updateStore(String description, String announcement, String telephoneNo,
