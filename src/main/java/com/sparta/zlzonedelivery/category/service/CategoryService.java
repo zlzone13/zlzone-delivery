@@ -8,6 +8,7 @@ import com.sparta.zlzonedelivery.category.service.dto.CategorySearchResponseDto;
 import com.sparta.zlzonedelivery.category.service.dto.CategorySingleResponseDto;
 import com.sparta.zlzonedelivery.category.service.dto.CategoryUpdateRequestDto;
 import com.sparta.zlzonedelivery.category.service.dto.StoreListByCategoryResponseDto;
+import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.relationship.StoreCategory;
@@ -93,12 +94,15 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategory(UUID categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        }
+    public void deleteCategory(UUID categoryId, UserDetailsImpl userDetails) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        categoryRepository.deleteById(categoryId);
+        String username = userDetails.getUsername();
+
+        category.setDeletedBy(username);
+
+        categoryRepository.save(category);
     }
 
     @Transactional

@@ -42,4 +42,8 @@ public abstract class BaseEntity {
     @Column(length = 10)
     private String deletedBy;
 
+    public void setDeletedBy(String username) {
+        this.deletedBy = username;
+    }
+
 }
