@@ -22,7 +22,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_categories")
-@SQLDelete(sql = "UPDATE p_categories SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE p_categories SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ? WHERE category_id = ?")
 public class Category extends BaseEntity {
 
     @Id
