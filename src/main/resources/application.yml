@@ -37,13 +37,4 @@ spring:
 
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
-  ai:
-    openai:
-      api-key: ${GPT_API_KEY}
-    retry:
-      max-attempts: 2
 
-jwt:
-  secret:
-    key: VGhpcyBpcyBUZXN0S2V5IGZvciBDcmVhdGluZyBKV1Qu
-  expiration: 3600000 # 1시간

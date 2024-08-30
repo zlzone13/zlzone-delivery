@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/chat-bots")
+@RequestMapping("api/v1/chatbots")
 @RequiredArgsConstructor
 public class ChatBotController {
 
