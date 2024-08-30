@@ -27,6 +27,7 @@ public class StoreCategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "store_category_id", updatable = false, nullable = false)
+    @Getter
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,5 +38,10 @@ public class StoreCategory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public StoreCategory(Store store, Category category) {
+        this.store = store;
+        this.category = category;
+    }
 
 }
