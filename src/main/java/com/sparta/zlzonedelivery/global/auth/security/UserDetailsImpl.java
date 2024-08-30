@@ -2,6 +2,7 @@ package com.sparta.zlzonedelivery.global.auth.security;
 
 import com.sparta.zlzonedelivery.user.User;
 import com.sparta.zlzonedelivery.user.UserRole;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
+    @Getter
     private final User user;
 
     private UserRole userRole;
