@@ -5,7 +5,7 @@ import com.sparta.zlzonedelivery.category.service.CategoryService;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.relationship.StoreCategory;
-import com.sparta.zlzonedelivery.relationship.repository.StoreCategoryRepository;
+import com.sparta.zlzonedelivery.relationship.service.StoreCategoryService;
 import com.sparta.zlzonedelivery.store.controller.dtos.StoreServiceCreateDto;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
@@ -30,7 +30,7 @@ public class StoreService {
 
     private final CategoryService categoryService;
 
-    private final StoreCategoryRepository storeCategoryRepository;
+    private final StoreCategoryService storeCategoryService;
 
     @Transactional
     public void createStore(StoreServiceCreateDto serviceCreateDto) {
@@ -94,14 +94,6 @@ public class StoreService {
 
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
-
-        List<StoreCategory> storeCategories = store.getStoreCategoryList();
-        if (storeCategories != null) {
-            for (StoreCategory storeCategory : storeCategories) {
-                storeCategory.setDeletedBy(user.getUsername());
-                storeCategoryRepository.deleteById(storeCategory.getId());
-            }
-        }
 
         store.setDeletedBy(user.getUsername());
 

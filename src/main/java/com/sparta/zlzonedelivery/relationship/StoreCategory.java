@@ -21,7 +21,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Table(name = "p_store_categories")
-@SQLDelete(sql = "UPDATE p_store_categories SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE p_store_categories SET deleted_at = CURRENT_TIMESTAMP, is_public = false WHERE store_category_id = ?")
 public class StoreCategory extends BaseEntity {
 
     @Id
