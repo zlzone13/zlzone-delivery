@@ -15,11 +15,8 @@ public class UserDetailsImpl implements UserDetails {
     @Getter
     private final User user;
 
-    private UserRole userRole;
-
     public UserDetailsImpl(User user) {
         this.user = user;
-        this.userRole = user.getRole();
     }
 
     @Override
@@ -48,8 +45,12 @@ public class UserDetailsImpl implements UserDetails {
         return user.getRole();
     }
 
-    public boolean hasRole(UserRole role) {
-        return this.userRole == role;
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }
