@@ -59,10 +59,10 @@ public class Location extends BaseEntity {
     private String liKorNm;
 
     @Builder
-    public Location (String ctprvnCd, String ctpKorNm,
-                     String sigCd, String sigKorNm,
-                     String emdCd, String emdKorNm,
-                     String liCd, String liKorNm) {
+    public Location(String ctprvnCd, String ctpKorNm,
+                    String sigCd, String sigKorNm,
+                    String emdCd, String emdKorNm,
+                    String liCd, String liKorNm) {
         this.ctprvnCd = ctprvnCd;
         this.ctpKorNm = ctpKorNm;
         this.sigCd = sigCd;
@@ -72,11 +72,6 @@ public class Location extends BaseEntity {
         this.liCd = liCd;
         this.liKorNm = liKorNm;
     }
-
-
-
-
-
 
 
 }

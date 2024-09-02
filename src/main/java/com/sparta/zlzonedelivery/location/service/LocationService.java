@@ -18,7 +18,7 @@ public class LocationService {
 
         return locationRepository.findByCtpKorNmAndSigKorNmAndEmdKorNmAndLiKorNm(location.getCtpKorNm(),
                         location.getSigKorNm(), location.getEmdKorNm(), location.getLiKorNm())
-                .orElseGet(()->locationRepository.save(location));
+                .orElseGet(() -> locationRepository.save(location));
     }
 
 }
