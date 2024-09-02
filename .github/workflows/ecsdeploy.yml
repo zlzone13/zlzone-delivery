@@ -74,8 +74,8 @@ jobs:
         # push it to ECR so that it can
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        --build-arg JWT_SECRET_KEY=$JWT_SECRET_KEY
-        --build-arg OPENAI_KEY=$OPENAI_KEY
+        --build-arg JWT_SECRET_KEY=${{secrets.JWT_SECRET_KEY}}
+        --build-arg OPENAI_KEY=${{secrets.OPENAI_KEY}}
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
