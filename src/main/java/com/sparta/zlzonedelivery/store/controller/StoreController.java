@@ -61,6 +61,22 @@ public class StoreController {
         return ResponseDto.okWithData(storeService.getStoreByLocationCtpName(pageable, ctpName));
     }
 
+    @GetMapping("/location/info")
+    public ResponseDto<Page<StoreReadResponseDto>> getStoreByLocationCtpNameSigName(@RequestParam("ctpName") String ctpName,
+                                                                                    @RequestParam("sigName") String sigName,
+                                                                                    @PageableDefault Pageable pageable) {
+        return ResponseDto.okWithData(storeService.getStoreByLocationCtpNameAndSigName(pageable, ctpName, sigName));
+    }
+
+    @GetMapping("/location/all-info")
+    public ResponseDto<Page<StoreReadResponseDto>> getStoreByAllLocation(@RequestParam("ctpName") String ctpName,
+                                                                         @RequestParam("sigName") String sigName,
+                                                                         @RequestParam("emdName") String emdName,
+                                                                         @RequestParam("liName") String liName,
+                                                                         @PageableDefault Pageable pageable) {
+        return ResponseDto.okWithData(storeService.getStoreByAllLocationInfo(pageable, ctpName, sigName, emdName, liName));
+    }
+
 
     @PatchMapping("/{store_id}")
     @Secured({"OWNER", "MASTER", "MANAGER"})

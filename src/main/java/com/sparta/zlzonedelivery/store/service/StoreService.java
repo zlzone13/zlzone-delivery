@@ -129,7 +129,18 @@ public class StoreService {
     }
 
     public Page<StoreReadResponseDto> getStoreByLocationCtpName(Pageable pageable, String ctpName) {
-        return storeRepository.findByLocation_CtpKorNmContaining(pageable, ctpName)
+        return storeRepository.findByLocation_CtpKorNmContainingAndIsPublicIsTrue(pageable, ctpName)
+                .map(StoreReadResponseDto::fromEntity);
+    }
+
+    public Page<StoreReadResponseDto> getStoreByLocationCtpNameAndSigName(Pageable pageable, String ctpName, String sigName) {
+        return storeRepository.findByLocation_CtpKorNmAndLocation_SigKorNm(pageable, ctpName, sigName)
+                .map(StoreReadResponseDto::fromEntity);
+    }
+
+    public Page<StoreReadResponseDto> getStoreByAllLocationInfo(Pageable pageable, String ctpName,
+                                                                String sigName, String emdName, String liName) {
+        return storeRepository.findByAllLocation(pageable, ctpName, sigName, emdName, liName)
                 .map(StoreReadResponseDto::fromEntity);
     }
 
