@@ -1,6 +1,7 @@
 package com.sparta.zlzonedelivery.store.controller;
 
 
+import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.global.dto.ResponseDto;
 import com.sparta.zlzonedelivery.store.service.StoreService;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreCreateRequestDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,8 +31,9 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping
-    public ResponseDto<Void> createStore(@RequestBody StoreCreateRequestDto requestDto) {
-        storeService.createStore(requestDto);
+    public ResponseDto<Void> createStore(@RequestBody StoreCreateRequestDto requestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        storeService.createStore(requestDto, userDetails);
         return ResponseDto.ok();
     }
 
