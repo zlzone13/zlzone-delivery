@@ -1,13 +1,10 @@
 spring:
   config:
-    activate:
-      on-profile: local
     import:
-    - optional:classpath:application-jwt.yml
-    - optional:file:.env[.properties]
+      - optional:classpath:application-jwt.yml
+      - optional:file:.env[.properties]
   application:
     name: zlzone-delivery
-
   data:
     redis:
       host: localhost
