@@ -1,6 +1,7 @@
 package com.sparta.zlzonedelivery.store.entity;
 
 import com.sparta.zlzonedelivery.global.entity.BaseEntity;
+import com.sparta.zlzonedelivery.location.entity.Location;
 import com.sparta.zlzonedelivery.relationship.StoreCategory;
 import com.sparta.zlzonedelivery.user.User;
 import jakarta.persistence.CascadeType;
@@ -35,17 +36,17 @@ public class Store extends BaseEntity {
     @Getter
     private UUID id;
 
-    //user_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    //category_id
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter
     private List<StoreCategory> storeCategoryList = new ArrayList<>();
 
-    //store_location_id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_location_id")
+    private Location location;
 
     @Column(name = "store_name", length = 100)
     @Getter
