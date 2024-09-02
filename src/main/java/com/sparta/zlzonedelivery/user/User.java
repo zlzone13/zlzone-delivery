@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 
 @ToString
 @Table(name = "p_users")
@@ -24,7 +23,6 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(UserSignupListener.class)
 @SQLRestriction(value = "is_public = true")
-@Where(clause = "")
 @SQLDelete(sql = """
         UPDATE p_users SET is_public = false,
                            deleted_at = CURRENT_TIMESTAMP
