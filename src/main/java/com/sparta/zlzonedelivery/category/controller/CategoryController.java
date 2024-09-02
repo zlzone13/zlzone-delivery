@@ -41,6 +41,7 @@ public class CategoryController {
     @PostMapping
     @Secured({"MASTER", "MANAGER"})
     public ResponseEntity<Void> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto) {
+
         categoryService.createCategory(categoryCreateRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -79,6 +80,7 @@ public class CategoryController {
     @Secured({"MASTER", "MANAGER"})
     public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         categoryService.deleteCategory(categoryId, userDetails);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

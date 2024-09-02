@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     // User
+    DUPLICATED_NICKNAME("DUPLICATED_NICKNAME", "이미 사용 중인 Nickname이 있습니다.", 409),
     DUPLICATED_USERNAME("DUPLICATED_USERNAME", "이미 사용 중인 Username 입니다.", 409),
     DUPLICATED_EMAIL("DUPLICATED_EMAIL", "이미 사용 중인 Email 입니다.", 409),
     INVALID_PASSWORD("INVALID_PASSWORD", "패스워드를 형식에 맞춰 입력해주세요.", 400),
@@ -48,6 +49,9 @@ public enum ErrorCode {
     CHATBOT_UNAVAILABLE("CHATBOT_UNAVAILABLE", "일시적으로 Chatbot 서비스를 사용할 수 없습니다.", 503),
     CHATBOT_GENERATION_FAILED("CHATBOT_GENERATION_FAILED", "상품 설명 생성이 실패했습니다.", 500),
     QUERY_AND_ANSWER_NOT_FOUND("QUERY_AND_ANSWER_NOT_FOUND", "질문과 답변을 찾을 수 없습니다.", 404),
+    
+    //Location
+    LOCATION_NOT_FOUND("LOCATION_NOT_FOUND", "주소를 찾을 수 없습니다.", 404),
 
     //ProductCategory
     PRODUCT_CATEGORY_NOT_FOUND("PRODUCT_CATEGORY_NOT_FOUND", "상품에 대한 카테고리를 찾을 수 없습니다.", 404);

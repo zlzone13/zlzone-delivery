@@ -12,10 +12,15 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
+
+    @Getter
     private final User user;
+
+    private UserRole userRole;
 
     public UserDetailsImpl(User user) {
         this.user = user;
+        this.userRole = user.getRole();
     }
 
     @Override

@@ -29,6 +29,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public void signUp(@RequestBody @Valid UserSignUpRequestDto requestDto) {
+
         User user = requestDto.toEntity();
 
         userService.createUser(user);

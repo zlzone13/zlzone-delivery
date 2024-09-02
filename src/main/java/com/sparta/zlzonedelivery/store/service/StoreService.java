@@ -1,19 +1,26 @@
 package com.sparta.zlzonedelivery.store.service;
 
-import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
+
+import com.sparta.zlzonedelivery.category.entity.Category;
+import com.sparta.zlzonedelivery.category.service.CategoryService;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
+import com.sparta.zlzonedelivery.location.entity.Location;
+import com.sparta.zlzonedelivery.location.service.LocationService;
+import com.sparta.zlzonedelivery.relationship.StoreCategory;
+import com.sparta.zlzonedelivery.store.controller.dtos.StoreServiceCreateDto;
 import com.sparta.zlzonedelivery.store.entity.Store;
 import com.sparta.zlzonedelivery.store.repository.StoreRepository;
-import com.sparta.zlzonedelivery.store.service.dtos.StoreCreateRequestDto;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreReadResponseDto;
 import com.sparta.zlzonedelivery.store.service.dtos.StoreUpdateRequestDto;
+import com.sparta.zlzonedelivery.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,22 +30,48 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
-    //TODO: JWT 설정 시 User 추가
-    @Transactional
-    public void createStore(StoreCreateRequestDto requestDto, UserDetailsImpl userDetails) {
+    private final CategoryService categoryService;
 
-        Store store = Store.builder()
-                .user(userDetails.getUser())
-                .storeName(requestDto.storeName())
-                .description(requestDto.description())
-                .announcement(requestDto.announcement())
-                .bNo(requestDto.bNo())
-                .telephoneNo(requestDto.telephoneNo())
-                .deliveryArea(requestDto.deliveryArea())
-                .openCloseTime(requestDto.openCloseTime())
-                .countryInfo(requestDto.countryInfo())
+    private final LocationService locationService;
+
+    @Transactional
+    public void createStore(StoreServiceCreateDto serviceCreateDto) {
+
+        Location location = Location.builder()
+                .ctprvnCd(serviceCreateDto.requestDto().ctprvnCd())
+                .ctpKorNm(serviceCreateDto.requestDto().ctpKorNm())
+                .sigCd(serviceCreateDto.requestDto().sigCd())
+                .sigKorNm(serviceCreateDto.requestDto().sigKorNm())
+                .emdCd(serviceCreateDto.requestDto().emdCd())
+                .emdKorNm(serviceCreateDto.requestDto().emdKorNm())
+                .liCd(serviceCreateDto.requestDto().liCd())
+                .liKorNm(serviceCreateDto.requestDto().liKorNm())
                 .build();
 
+        //위치 주소 매핑(같은 컬럼이 존재할 수도 있으니까)
+        Location savedLocation = locationService.findByLocationName(location);
+
+        //카테고리 매핑
+        List<Category> categories = categoryService.getByCategoryName(serviceCreateDto.requestDto().categories());
+
+        Store store = Store.builder()
+                .storeName(serviceCreateDto.requestDto().storeName())
+                .description(serviceCreateDto.requestDto().description())
+                .announcement(serviceCreateDto.requestDto().announcement())
+                .bNo(serviceCreateDto.requestDto().bNo())
+                .telephoneNo(serviceCreateDto.requestDto().telephoneNo())
+                .deliveryArea(serviceCreateDto.requestDto().deliveryArea())
+                .openCloseTime(serviceCreateDto.requestDto().openCloseTime())
+                .countryInfo(serviceCreateDto.requestDto().countryInfo())
+                .user(serviceCreateDto.user())
+                .location(savedLocation)
+                .build();
+
+        for (Category category : categories) {
+            StoreCategory storeCategory = new StoreCategory(store, category);
+            //store에도 넣어준다.
+            store.getStoreCategoryList().add(storeCategory);
+        }
         storeRepository.save(store);
     }
 
@@ -74,22 +107,42 @@ public class StoreService {
     }
 
     @Transactional
-    public void deleteStore(UUID storeId) {
+    public void deleteStore(UUID storeId, User user) {
 
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
+
+        store.setDeletedBy(user.getUsername());
+
         storeRepository.deleteById(store.getId());
     }
 
-     public Store findStoreById(UUID storeId) {
+    public Store findStoreById(UUID storeId) {
         return storeRepository.findByIdAndIsPublicIsTrue(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
     }
 
     public void existStoreById(UUID storeId) {
-        if(!storeRepository.existsByIdAndIsPublicIsTrue(storeId)) {
+
+        if (!storeRepository.existsByIdAndIsPublicIsTrue(storeId)) {
             throw new CustomException(ErrorCode.STORE_NOT_FOUND);
         }
+    }
+
+    public Page<StoreReadResponseDto> getStoreByLocationCtpName(Pageable pageable, String ctpName) {
+        return storeRepository.findByLocation_CtpKorNmContainingAndIsPublicIsTrue(pageable, ctpName)
+                .map(StoreReadResponseDto::fromEntity);
+    }
+
+    public Page<StoreReadResponseDto> getStoreByLocationCtpNameAndSigName(Pageable pageable, String ctpName, String sigName) {
+        return storeRepository.findByLocation_CtpKorNmAndLocation_SigKorNm(pageable, ctpName, sigName)
+                .map(StoreReadResponseDto::fromEntity);
+    }
+
+    public Page<StoreReadResponseDto> getStoreByAllLocationInfo(Pageable pageable, String ctpName,
+                                                                String sigName, String emdName, String liName) {
+        return storeRepository.findByAllLocation(pageable, ctpName, sigName, emdName, liName)
+                .map(StoreReadResponseDto::fromEntity);
     }
 }
