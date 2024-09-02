@@ -33,6 +33,7 @@ public class Store extends BaseEntity {
     //user_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @Getter
     private User user;
 
     //category_id
@@ -72,9 +73,10 @@ public class Store extends BaseEntity {
     private String countryInfo;
 
     @Builder
-    protected Store(String storeName, String description, String announcement, String bNo,
+    protected Store(User user, String storeName, String description, String announcement, String bNo,
                     String telephoneNo, String deliveryArea, String openCloseTime,
                     String countryInfo) {
+        this.user = user;
         this.storeName = storeName;
         this.description = description;
         this.announcement = announcement;

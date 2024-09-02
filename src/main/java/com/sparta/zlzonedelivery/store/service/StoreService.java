@@ -1,5 +1,6 @@
 package com.sparta.zlzonedelivery.store.service;
 
+import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.global.error.CustomException;
 import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.store.entity.Store;
@@ -24,9 +25,10 @@ public class StoreService {
 
     //TODO: JWT 설정 시 User 추가
     @Transactional
-    public void createStore(StoreCreateRequestDto requestDto) {
+    public void createStore(StoreCreateRequestDto requestDto, UserDetailsImpl userDetails) {
 
         Store store = Store.builder()
+                .user(userDetails.getUser())
                 .storeName(requestDto.storeName())
                 .description(requestDto.description())
                 .announcement(requestDto.announcement())

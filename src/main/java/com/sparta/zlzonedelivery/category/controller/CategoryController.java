@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,13 +39,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Void> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
-
+    @Secured({"MASTER", "MANAGER"})
+    public ResponseEntity<Void> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto) {
         categoryService.createCategory(categoryCreateRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -56,13 +52,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategorySingleResponseDto> getSingleCategory(@PathVariable UUID categoryId,
-                                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
-
+    @Secured({"MASTER", "MANAGER"})
+    public ResponseEntity<CategorySingleResponseDto> getSingleCategory(@PathVariable UUID categoryId) {
         CategorySingleResponseDto categoryDetail = categoryService.getSingleCategory(categoryId);
         return new ResponseEntity<>(categoryDetail, HttpStatus.OK);
     }
@@ -76,6 +67,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
+    @Secured({"MASTER", "MANAGER"})
     public ResponseEntity<Void> updateCategory(
             @PathVariable UUID categoryId,
             @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
@@ -84,13 +76,9 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
+    @Secured({"MASTER", "MANAGER"})
     public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        if (!userDetails.hasRole(UserRole.MASTER) && !userDetails.hasRole(UserRole.MANAGER)) {
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
-
         categoryService.deleteCategory(categoryId, userDetails);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
