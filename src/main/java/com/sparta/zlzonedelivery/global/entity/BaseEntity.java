@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
+    @SoftDelete(strategy = SoftDeleteType.ACTIVE) // 현재 작동안됨 why??
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic = true;
 
@@ -41,6 +44,11 @@ public abstract class BaseEntity {
 
     @Column(length = 10)
     private String deletedBy;
+
+    public void injectCreaterAndUpdater(String createdBy, String updatedBy) {
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+    }
 
     public void setDeletedBy(String username) {
         this.deletedBy = username;

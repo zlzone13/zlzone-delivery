@@ -1,5 +1,6 @@
 package com.sparta.zlzonedelivery.store.service;
 
+
 import com.sparta.zlzonedelivery.category.entity.Category;
 import com.sparta.zlzonedelivery.category.service.CategoryService;
 import com.sparta.zlzonedelivery.global.error.CustomException;
@@ -71,7 +72,6 @@ public class StoreService {
             //store에도 넣어준다.
             store.getStoreCategoryList().add(storeCategory);
         }
-
         storeRepository.save(store);
     }
 
@@ -112,6 +112,7 @@ public class StoreService {
         Store store = storeRepository.findByIdAndIsPublicIsTrue(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
+
         store.setDeletedBy(user.getUsername());
 
         storeRepository.deleteById(store.getId());
@@ -123,6 +124,7 @@ public class StoreService {
     }
 
     public void existStoreById(UUID storeId) {
+
         if (!storeRepository.existsByIdAndIsPublicIsTrue(storeId)) {
             throw new CustomException(ErrorCode.STORE_NOT_FOUND);
         }
@@ -143,5 +145,4 @@ public class StoreService {
         return storeRepository.findByAllLocation(pageable, ctpName, sigName, emdName, liName)
                 .map(StoreReadResponseDto::fromEntity);
     }
-
 }

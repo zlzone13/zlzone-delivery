@@ -116,8 +116,9 @@ public class CategoryService {
         return categories.map(category -> new CategorySearchResponseDto(category.getCategoryName()));
     }
 
+
     public List<Category> getByCategoryName(List<String> categoryNames) {
         return categoryRepository.findByCategoryNameIn(categoryNames);
     }
-
+  
 }

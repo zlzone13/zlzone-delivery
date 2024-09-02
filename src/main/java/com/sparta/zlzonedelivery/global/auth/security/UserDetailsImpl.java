@@ -12,6 +12,7 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
+
     @Getter
     private final User user;
 
@@ -48,8 +49,12 @@ public class UserDetailsImpl implements UserDetails {
         return user.getRole();
     }
 
-    public boolean hasRole(UserRole role) {
-        return this.userRole == role;
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

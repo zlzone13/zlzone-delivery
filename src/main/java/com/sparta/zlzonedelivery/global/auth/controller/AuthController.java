@@ -9,6 +9,7 @@ import com.sparta.zlzonedelivery.global.error.ErrorCode;
 import com.sparta.zlzonedelivery.user.User;
 import com.sparta.zlzonedelivery.user.UserRole;
 import com.sparta.zlzonedelivery.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,8 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public void signUp(@RequestBody UserSignUpRequestDto requestDto) {
+    public void signUp(@RequestBody @Valid UserSignUpRequestDto requestDto) {
+
         User user = requestDto.toEntity();
 
         userService.createUser(user);

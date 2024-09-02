@@ -1,17 +1,18 @@
 spring:
   config:
-    activate:
-      on-profile: local
     import:
-    - optional:classpath:application-jwt.yml
-    - optional:file:.env[.properties]
+      - optional:classpath:application-jwt.yml
+      - optional:file:.env[.properties]
   application:
     name: zlzone-delivery
-
   data:
     redis:
       host: localhost
       port: 6379
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 50
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -37,4 +38,3 @@ spring:
 
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
-
