@@ -83,7 +83,7 @@ public class Store extends BaseEntity {
     @Builder
     protected Store(String storeName, String description, String announcement, String bNo,
                     String telephoneNo, String deliveryArea, String openCloseTime,
-                    String countryInfo, User user) {
+                    String countryInfo, User user, Location location) {
         this.storeName = storeName;
         this.description = description;
         this.announcement = announcement;
@@ -93,6 +93,7 @@ public class Store extends BaseEntity {
         this.openCloseTime = openCloseTime;
         this.countryInfo = countryInfo;
         this.user = user;
+        this.location = location;
     }
 
     public void updateStore(String description, String announcement, String telephoneNo,

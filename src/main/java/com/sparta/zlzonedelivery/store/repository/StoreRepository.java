@@ -16,4 +16,6 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {
 
     boolean existsByIdAndIsPublicIsTrue(UUID uuid);
 
+    Page<Store> findByLocation_CtpKorNmContaining(Pageable pageable, String ctpKorNm);
+
 }

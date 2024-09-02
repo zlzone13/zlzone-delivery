@@ -17,7 +17,15 @@ public record StoreCreateRequestDto(
         String openCloseTime,
         @NotBlank
         String countryInfo,
-        List<String> categories
+        List<String> categories,
+        String ctprvnCd,
+        String ctpKorNm,
+        String sigCd,
+        String sigKorNm,
+        String emdCd,
+        String emdKorNm,
+        String liCd,
+        String liKorNm
 ) {
 
 }
