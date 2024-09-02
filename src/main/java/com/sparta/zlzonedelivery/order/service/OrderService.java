@@ -147,8 +147,6 @@ public class OrderService {
                 || (userDetails.getRole() == UserRole.MASTER || userDetails.getRole() == UserRole.MANAGER)) {
 
             order.updateOrderOnline(requestDto);
-
-            orderRepository.save(order);
         } else {
             throw new CustomException(ErrorCode.ORDER_NOT_FOUND);
         }
@@ -167,9 +165,6 @@ public class OrderService {
                 || (userDetails.getRole() == UserRole.MASTER || userDetails.getRole() == UserRole.MANAGER)) {
 
             order.updateOrderOffline(requestDto);
-
-            orderRepository.save(order);
-
         }
 
         throw new CustomException(ErrorCode.ORDER_NOT_FOUND);

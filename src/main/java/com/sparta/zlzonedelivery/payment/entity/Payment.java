@@ -2,6 +2,7 @@ package com.sparta.zlzonedelivery.payment.entity;
 
 import com.sparta.zlzonedelivery.global.entity.BaseEntity;
 import com.sparta.zlzonedelivery.order.entity.Order;
+import com.sparta.zlzonedelivery.payment.service.dto.PaymentUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,13 +40,22 @@ public class Payment extends BaseEntity {
     PaymentStatus paymentStatus;
 
     @Column(nullable = false)
-    String phId;
+    String pgId;
 
     @Builder
-    public Payment(Order order, PaymentStatus paymentStatus, String phId) {
+    public Payment(Order order, PaymentStatus paymentStatus, String pgId) {
         this.order = order;
         this.paymentStatus = paymentStatus;
-        this.phId = phId;
+        this.pgId = pgId;
+    }
+
+    public void updatePayment(PaymentUpdateRequestDto requestDto) {
+        if (requestDto.pgId() != null) {
+            this.pgId = requestDto.pgId();
+        }
+        if (requestDto.paymentStatus() != null) {
+            this.paymentStatus = requestDto.paymentStatus();
+        }
     }
 
 }

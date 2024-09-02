@@ -11,6 +11,7 @@ import com.sparta.zlzonedelivery.payment.entity.PaymentStatus;
 import com.sparta.zlzonedelivery.payment.repository.PaymentRepository;
 import com.sparta.zlzonedelivery.payment.service.dto.PaymentCreateRequestDto;
 import com.sparta.zlzonedelivery.payment.service.dto.PaymentGetResponseDto;
+import com.sparta.zlzonedelivery.payment.service.dto.PaymentUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class PaymentService {
         Payment payment = Payment.builder()
                 .order(order)
                 .paymentStatus(PaymentStatus.COMPLETED)
-                .phId(requestDto.pgId())
+                .pgId(requestDto.pgId())
                 .build();
 
         paymentRepository.save(payment);
@@ -54,10 +55,21 @@ public class PaymentService {
     }
 
     public PaymentGetResponseDto getPayment(UUID paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOT_FOUND));
+        Payment payment = checkPayment(paymentId);
 
         return PaymentGetResponseDto.fromEntity(payment);
+    }
+
+    @Transactional
+    public void updatePayment(UUID paymentId, PaymentUpdateRequestDto requestDto) {
+        Payment payment = checkPayment(paymentId);
+
+        payment.updatePayment(requestDto);
+    }
+
+    private Payment checkPayment(UUID paymentId) {
+        return paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOT_FOUND));
     }
 
 }

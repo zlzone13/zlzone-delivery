@@ -26,7 +26,7 @@ public record PaymentGetResponseDto(
                 .orderId(payment.getOrder().getId())
                 .userId(payment.getOrder().getUser().getId())
                 .amount(payment.getOrder().getTotalAmount())
-                .pgId(payment.getPhId())
+                .pgId(payment.getPgId())
                 .paymentStatus(payment.getPaymentStatus())
                 .build();
     }

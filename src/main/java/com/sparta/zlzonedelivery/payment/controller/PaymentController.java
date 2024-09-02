@@ -4,14 +4,17 @@ import com.sparta.zlzonedelivery.global.auth.security.UserDetailsImpl;
 import com.sparta.zlzonedelivery.payment.service.PaymentService;
 import com.sparta.zlzonedelivery.payment.service.dto.PaymentCreateRequestDto;
 import com.sparta.zlzonedelivery.payment.service.dto.PaymentGetResponseDto;
+import com.sparta.zlzonedelivery.payment.service.dto.PaymentUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,4 +50,12 @@ public class PaymentController {
         PaymentGetResponseDto responseDto = paymentService.getPayment(paymentId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+    @PatchMapping("/payments/{paymentId}")
+    @Secured("MASTER")
+    public ResponseEntity<Void> updatePayment(@PathVariable UUID paymentId, @RequestBody PaymentUpdateRequestDto requestDto) {
+        paymentService.updatePayment(paymentId, requestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
