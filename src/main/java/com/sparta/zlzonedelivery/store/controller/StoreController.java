@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -52,6 +53,12 @@ public class StoreController {
     @Secured({"MASTER", "MANAGER"})
     public ResponseDto<Page<StoreReadResponseDto>> getAllStore(@PageableDefault Pageable pageable) {
         return ResponseDto.okWithData(storeService.getStoreAll(pageable));
+    }
+
+    @GetMapping("/location")
+    public ResponseDto<Page<StoreReadResponseDto>> getStoreByLocationCtpName(@RequestParam("ctpName") String ctpName,
+                                                                             @PageableDefault Pageable pageable) {
+        return ResponseDto.okWithData(storeService.getStoreByLocationCtpName(pageable, ctpName));
     }
 
 
