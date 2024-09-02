@@ -27,8 +27,8 @@ public class UserService {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
 
-        if (userRepository.existsByNickname(user.getNickname())) {
-            throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new CustomException(ErrorCode.DUPLICATED_USERNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
