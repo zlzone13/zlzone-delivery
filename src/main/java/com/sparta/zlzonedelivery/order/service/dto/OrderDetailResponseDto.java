@@ -6,11 +6,9 @@ import com.sparta.zlzonedelivery.order.entity.OrderStatus;
 import com.sparta.zlzonedelivery.order.entity.OrderType;
 import lombok.Builder;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public record OrderDetailResponseDto(
 
@@ -23,12 +21,6 @@ public record OrderDetailResponseDto(
         String toOwnerRequest,
         Integer totalAmount,
         OrderStatus orderStatus,
-        Instant createdAt,
-        String createdBy,
-        Instant updatedAt,
-        String updatedBy,
-        Instant deletedAt,
-        String deletedBy,
         List<OrderItemDto> products
 
 ) {
@@ -44,12 +36,6 @@ public record OrderDetailResponseDto(
                 .toOwnerRequest(order.getToOwnerRequest())
                 .totalAmount(order.getTotalAmount())
                 .orderStatus(order.getOrderStatus())
-                .createdAt(Instant.from(order.getCreatedAt()))
-                .createdBy(order.getCreatedBy())
-                .updatedAt(Instant.from(order.getUpdatedAt()))
-                .updatedBy(order.getUpdatedBy())
-                .deletedAt(Instant.from(order.getDeletedAt()))
-                .deletedBy(order.getDeletedBy())
                 .products(order.getOrderProducts().stream()
                         .map(op -> new OrderItemDto(op.getProduct().getId(), op.getQuantity()))
                         .toList())

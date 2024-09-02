@@ -19,6 +19,7 @@ import org.hibernate.annotations.SQLDelete;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_payments")
