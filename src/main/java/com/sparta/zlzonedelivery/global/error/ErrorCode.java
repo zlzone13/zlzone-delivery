@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     // User
-    DUPLICATED_NICKNAME("DUPLICATED_NICKNAME", "이미 사용 중인 Nickname이 있습니다.", 409),
+    DUPLICATED_USERNAME("DUPLICATED_USERNAME", "이미 사용 중인 Username 입니다.", 409),
     DUPLICATED_EMAIL("DUPLICATED_EMAIL", "이미 사용 중인 Email 입니다.", 409),
     INVALID_PASSWORD("INVALID_PASSWORD", "패스워드를 형식에 맞춰 입력해주세요.", 400),
     INVALID_NICKNAME("INVALID_NICKNAME", "Nickname을 형식에 맞춰 입력해주세요.", 400),

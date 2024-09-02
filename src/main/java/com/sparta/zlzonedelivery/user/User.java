@@ -3,25 +3,35 @@ package com.sparta.zlzonedelivery.user;
 import com.sparta.zlzonedelivery.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
+@ToString
 @Table(name = "p_users")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE p_users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@EntityListeners(UserSignupListener.class)
+@SQLRestriction(value = "is_public = true")
+@SQLDelete(sql = """
+        UPDATE p_users SET is_public = false,
+                           deleted_at = CURRENT_TIMESTAMP
+                       WHERE id = ?
+        """)
 public class User extends BaseEntity {
 
     @Id
+    @Getter
     @GeneratedValue
     private Long id;
 
@@ -34,8 +44,6 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Getter
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-    // RFC 2822
     @Column(unique = true)
     private String email;
 
@@ -48,7 +56,8 @@ public class User extends BaseEntity {
     private UserRole role;
 
     @Builder
-    public User(String username, String nickname, String email, String password, UserRole role) {
+    public User(Long id, String username, String nickname, String email, String password, UserRole role) {
+        this.id = id;
         this.username = username;
         this.nickname = nickname;
         this.email = email;
@@ -56,14 +65,19 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public User encodePassword(String encodedPassword) {
-        return User.builder()
-                .username(this.username)
-                .nickname(this.nickname)
-                .password(encodedPassword)
-                .email(this.email)
-                .role(this.role)
-                .build();
+    public void encodePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public boolean isAdmin() {
+        return UserRole.MASTER == role || UserRole.MANAGER == role;
+    }
+
+    public void updateInfo(User user) {
+        if (user.nickname != null) this.nickname = user.nickname;
+        if (user.email != null) this.email = user.email;
+        if (user.password != null) this.password = user.password;
+        if (user.role != null) this.role = user.role;
     }
 
 }
