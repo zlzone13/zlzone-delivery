@@ -50,10 +50,6 @@ public abstract class BaseEntity {
         this.updatedBy = updatedBy;
     }
 
-    public void injectRemover(String username) {
-        this.deletedBy = username;
-    }
-
     public void setDeletedBy(String username) {
         this.deletedBy = username;
     }
