@@ -17,6 +17,8 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.Objects;
+
 @ToString
 @Table(name = "p_users")
 @Entity
@@ -78,6 +80,18 @@ public class User extends BaseEntity {
         if (user.email != null) this.email = user.email;
         if (user.password != null) this.password = user.password;
         if (user.role != null) this.role = user.role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(nickname, user.nickname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, nickname, email, password, role);
     }
 
 }
