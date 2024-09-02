@@ -1,0 +1,59 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:471112635848:task-definition/zlzone13-task:1",
+  "containerDefinitions": [
+    {
+      "name": "zlzone13-container",
+      "image": "471112635a848.dkr.ecr.ap-northeast-2.amazonaws.com/zlzone13/zlzone-delivery",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "zlzone13-container-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 80,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "systemControls": []
+    }
+  ],
+  "family": "zlzone13-task",
+  "executionRoleArn": "arn:aws:iam::471112635848:role/ecsTaskExecutionRole",
+  "networkMode": "bridge",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2"
+  ],
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "cpu": "1024",
+  "memory": "2048",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2024-09-02T14:24:34.374Z",
+  "registeredBy": "arn:aws:iam::471112635848:root",
+  "tags": []
+}
