@@ -67,6 +67,15 @@ public class PaymentService {
         payment.updatePayment(requestDto);
     }
 
+    @Transactional
+    public void deletePayment(UUID paymentId, UserDetailsImpl userDetails) {
+        Payment payment = checkPayment(paymentId);
+        String username = userDetails.getUsername();
+
+        payment.setDeletedBy(username);
+        paymentRepository.save(payment);
+    }
+
     private Payment checkPayment(UUID paymentId) {
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOT_FOUND));
